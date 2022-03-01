@@ -4,6 +4,7 @@
 {-# LANGUAGE FlexibleContexts           #-}
 {-# LANGUAGE FlexibleInstances          #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE StandaloneDeriving         #-}
 {-# LANGUAGE LambdaCase                 #-}
 {-# LANGUAGE MultiParamTypeClasses      #-}
 {-# LANGUAGE RankNTypes                 #-}
@@ -241,9 +242,7 @@ instance MonadBaseControl b m => MonadBaseControl b (AWST' r m) where
     liftBaseWith = defaultLiftBaseWith
     restoreM     = defaultRestoreM
 
-instance MonadUnliftIO m => MonadUnliftIO (AWST' r m) where
-    askUnliftIO = AWST' $ (\(UnliftIO f) -> UnliftIO $ f . unAWST)
-        <$> askUnliftIO
+deriving instance MonadUnliftIO m => MonadUnliftIO (AWST' r m)
 
 instance MonadResource m => MonadResource (AWST' r m) where
     liftResourceT = lift . liftResourceT
