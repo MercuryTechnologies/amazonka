@@ -20,6 +20,7 @@ import           Data.Aeson
 import           Data.Aeson.Types            (parseEither)
 import           Data.Maybe
 import           Data.Monoid
+import           Data.Functor.Alt
 
 import           Network.AWS.Data.ByteString
 import           Network.AWS.Data.Headers
@@ -109,7 +110,7 @@ serviceError a s h c m r =
 
 getRequestId :: [Header] -> Maybe RequestId
 getRequestId h =
-    either (const Nothing) Just (h .# hAMZRequestId <|> h .# hAMZNRequestId)
+    either (const Nothing) Just (h .# hAMZRequestId <!> h .# hAMZNRequestId)
 
 getErrorCode :: Status -> [Header] -> ErrorCode
 getErrorCode s h =
@@ -147,10 +148,10 @@ parseXMLError a s h bs = decodeError a s h bs (decodeXML bs >>= go)
     go x = serviceError a s h
         <$> code x
         <*> may (firstElement "Message"   x)
-        <*> may (firstElement "RequestId" x  <|> firstElement "RequestID" x)
+        <*> may (firstElement "RequestId" x  <!> firstElement "RequestID" x)
 
     code x = Just <$> (firstElement "Code" x >>= parseXML)
-         <|> return root
+         <!> return root
 
     root = errorCode <$> rootElementName bs
 
