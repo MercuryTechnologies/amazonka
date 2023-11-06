@@ -39,8 +39,8 @@ module Network.AWS.Data.Crypto
     , Base   (..)
     ) where
 
-import           "cryptonite" Crypto.Hash
-import           "cryptonite" Crypto.MAC.HMAC
+import           "crypton" Crypto.Hash
+import           "crypton" Crypto.MAC.HMAC
 import           Data.ByteArray
 import           Data.ByteArray.Encoding
 import           Data.ByteString         (ByteString)

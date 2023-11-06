@@ -86,7 +86,7 @@ library
         , case-insensitive     >= 1.2
         , conduit              >= 1.1
         , conduit-extra        >= 1.1
-        , cryptonite           >= 0.4
+        , crypton              >= 0.32
         , deepseq              >= 1.4
         , exceptions           >= 0.6
         , hashable             >= 1.2
